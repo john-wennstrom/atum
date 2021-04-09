@@ -3,4 +3,4 @@ A collection of THREE.js interactive components for geometric and mathematical v
 
 ### Square with 8 spheres
 
-![](https://https://github.com/john-wennstrom/atum/blob/master/docs/images/square-with-eight-spheres.png)
+![](https://https://github.com/john-wennstrom/atum/blob/main/docs/images/square-with-eight-spheres.png)

@@ -31,14 +31,16 @@ const ConicalCurve = ({ axis, color, inverted }) => {
     };
 
     for (let i = 0; i < 200; i++) {
-        const t = i / 200 * (inverted ? -1 : 1);
-        const r = i / 200 * radius;
-        const point = conicalSpiralPoint(t, r, rev, height);
+        const t = i / 200;
+        const r = i / 200 * radius * (inverted ? -1 : 1);
+        const point = conicalSpiralPoint(t, r, rev, height * (inverted ? -1 : 1));
         points.push(new THREE.Vector3(...getFlippedPoint(point)));
     }
 
     useEffect(() => {
-        setBuffer(new THREE.BufferGeometry().setFromPoints(curve.current.getPoints(200)));
+        const geo = new THREE.BufferGeometry().setFromPoints(curve.current.getPoints(200));
+        geo.computeVertexNormals(true);
+        setBuffer(geo);
     }, [curve]);
 
     return (

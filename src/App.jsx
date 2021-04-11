@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { GizmoHelper, GizmoViewcube, OrbitControls } from '@react-three/drei';
 import Grid from './components/Grid';
 import Beizer from './components/Beizer';
 import ConicalCurve from './components/ConicalCurve';
@@ -12,6 +13,7 @@ const settings = {
 };
 
 const App = () => {
+    const controlsRef = useRef();
     const cubeSpheres8 = useRef();
     const egg = useRef();
 
@@ -31,6 +33,15 @@ const App = () => {
 
     return (
         <>
+            <GizmoHelper
+                onTarget={() => controlsRef.current.target}
+                onUpdate={() => controlsRef.current.update()}
+            >
+                <GizmoViewcube />
+            </GizmoHelper>
+
+            <OrbitControls ref={controlsRef} />
+
             {cubeSpheres8.current && settings.outlineEffect && (
                 <OutlineEffect objects={cubeSpheres8.current.children} />
             )}

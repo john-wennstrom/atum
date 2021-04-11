@@ -4,7 +4,9 @@ import * as THREE from 'three';
 import { primitive } from '@react-three/fiber';
 import { conicalSpiralPoint } from '../utils/algorithms';
 
-const ConicalCurve = ({ axis, color, inverted }) => {
+const ConicalCurve = ({
+    axis, color, inverted, visible,
+}) => {
     const geometry = useRef([]);
     const material = useRef();
     const curve = useRef();
@@ -49,7 +51,7 @@ const ConicalCurve = ({ axis, color, inverted }) => {
                 <catmullRomCurve3 points={points} ref={curve} curveType="catmullrom" tension={1} />
             )}
             {curve && curve.current && (
-                <line name="ConicalCurve.Line" ref={geometry} geometry={buffer}>
+                <line name="ConicalCurve.Line" ref={geometry} geometry={buffer} visible={visible}>
                     <primitive object={buffer} />
                     <lineBasicMaterial name="ConicalCurve.LineBasicMaterial" ref={material} color={color} opacity={0.45} />
                 </line>

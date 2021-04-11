@@ -1,10 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { GizmoHelper, GizmoViewcube, OrbitControls } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+import {
+    GizmoHelper, GizmoViewcube, OrbitControls, OrthographicCamera,
+} from '@react-three/drei';
+import styled from 'styled-components';
 import Grid from './components/Grid';
 import Beizer from './components/Beizer';
 import ConicalCurve from './components/ConicalCurve';
 import OutlineEffect from './effects/OutlineEffect';
+import Header from './web/components/Header';
+
+const Wrapper = styled.div`
+    flex: 1;
+`;
 
 const settings = {
     outlineEffect: false,
@@ -15,7 +24,6 @@ const settings = {
 const App = () => {
     const controlsRef = useRef();
     const cubeSpheres8 = useRef();
-    const egg = useRef();
 
     // eslint-disable-next-line no-unused-vars
     const [reload, setReload] = useState();
@@ -33,36 +41,45 @@ const App = () => {
 
     return (
         <>
-            <GizmoHelper
-                onTarget={() => controlsRef.current.target}
-                onUpdate={() => controlsRef.current.update()}
-            >
-                <GizmoViewcube />
-            </GizmoHelper>
+            <Header />
+            <Wrapper>
+                <Canvas gl={{ antialias: true }}>
+                    <OrthographicCamera position={[0, 0, 5]} zoom={170} makeDefault />
+                    <ambientLight />
+                    <pointLight position={[10, 10, 10]} />
 
-            <OrbitControls ref={controlsRef} />
+                    <GizmoHelper
+                        onTarget={() => controlsRef.current.target}
+                        onUpdate={() => controlsRef.current.update()}
+                    >
+                        <GizmoViewcube />
+                    </GizmoHelper>
 
-            {cubeSpheres8.current && settings.outlineEffect && (
-                <OutlineEffect objects={cubeSpheres8.current.children} />
-            )}
+                    <OrbitControls ref={controlsRef} />
 
-            <Grid />
+                    {cubeSpheres8.current && settings.outlineEffect && (
+                        <OutlineEffect objects={cubeSpheres8.current.children} />
+                    )}
 
-            {settings.bezier && (
-                <Beizer points={points} color={0xff0000} steps={50} />
-            )}
+                    <Grid />
 
-            {settings.conicalCurve && (
-                <>
-                    <ConicalCurve axis="z" color={0x555555} />
-                    <ConicalCurve axis="x" color={0x555555} />
-                    <ConicalCurve axis="y" color={0x0000ff} />
+                    {settings.bezier && (
+                        <Beizer points={points} color={0xff0000} steps={50} />
+                    )}
 
-                    <ConicalCurve axis="z" color={0x555555} inverted />
-                    <ConicalCurve axis="x" color={0x555555} inverted />
-                    <ConicalCurve axis="y" color={0xff0000} inverted />
-                </>
-            )}
+                    {settings.conicalCurve && (
+                        <>
+                            <ConicalCurve axis="z" color={0x555555} />
+                            <ConicalCurve axis="x" color={0x555555} />
+                            <ConicalCurve axis="y" color={0x0000ff} />
+
+                            <ConicalCurve axis="z" color={0x555555} inverted />
+                            <ConicalCurve axis="x" color={0x555555} inverted />
+                            <ConicalCurve axis="y" color={0xff0000} inverted />
+                        </>
+                    )}
+                </Canvas>
+            </Wrapper>
         </>
     );
 };
